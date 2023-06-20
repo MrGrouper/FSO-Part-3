@@ -1,7 +1,30 @@
+require('dotenv').config()
 const express = require('express')
 const morgan = require('morgan')
 const app = express()
 const cors = require('cors')
+const Person = require('./models/person')
+// const mongoose = require('mongoose')
+
+// const url =
+//   `mongodb+srv://nusaha1:ilikebeans@cluster0.6sxfoib.mongodb.net/phonebookApp?retryWrites=true&w=majority`
+
+// mongoose.set('strictQuery',false)
+// mongoose.connect(url)
+
+// const personSchema = new mongoose.Schema({
+//   name: String,
+//   number: String,
+// })
+
+// personSchema.set('toJSON', {
+//   transform: (document, returnedObject) => {
+//     returnedObject.id = returnedObject._id.toString()
+//     delete returnedObject._id
+//     delete returnedObject.__v
+//   }
+// })
+
 
 
 app.use(express.json())
@@ -40,7 +63,9 @@ app.get('/info', (request, response) => {
 })
 
 app.get('/api/persons', (request, response) => {
-  response.json(persons)
+  Person.find({}).then(persons => {
+    response.json(persons)
+  })
 })
 
 app.get('/api/persons/:id', (request, response) => {
@@ -102,7 +127,7 @@ const generateId = () => Math.floor(Math.random()*10000)
     response.json(person)
   })
 
-  const PORT = process.env.PORT || 3001
+const PORT = process.env.PORT
 app.listen(PORT, () => {
   console.log(`Server running on port ${PORT}`)
 })
